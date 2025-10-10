@@ -22,7 +22,8 @@ export default {
 
       <navigation 
        @next="nextQuestion" 
-       @prev="prevQuestion">
+       @prev="prevQuestion"
+       @reset="resetQuestion">
       </navigation>
   </div>
   `,
@@ -74,6 +75,19 @@ export default {
       if (this.currentIndex > 0) {
         this.currentIndex--;
         this.selectedOption = null;
+      }
+    },
+    resetQuestion() {
+      if(this.currentIndex > 0) {
+        this.currentIndex = 0;
+        this.selectedOption = null;
+
+        const q = this.questions[this.currentIndex];
+        setClock(q.hour, q.minute);
+      } else {
+        this.selectedOption = null;
+        const q = this.questions[this.currentIndex];
+        setClock(q.hour, q.minute);
       }
     }
   }
