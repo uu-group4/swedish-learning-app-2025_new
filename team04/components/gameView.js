@@ -35,6 +35,7 @@ export default {
       level_2: "2c6d3f66",
       level_3: "47662d57",
       questions: [],
+      answers: [],
       currentIndex: 0,
       selectedOption: null
     };
@@ -71,11 +72,26 @@ export default {
   methods: {
     selectOption(index) {
       this.selectedOption = index;
+       // create tuple-like object: { id: questionIndex, user: selectedIndex, correct: correctIndex }
+      const id = this.currentIndex;
+      const correct = this.currentQuestion ? this.currentQuestion.correctIndex : null;
+      const entry = { id, user: index, correct };
+
+      // update existing answer for this question or push new
+      const existing = this.answers.find(a => a.id === id);
+      if (existing) {
+        existing.user = entry.user;
+        existing.correct = entry.correct;
+      } else {
+        this.answers.push(entry);
+      }
   },
     nextQuestion() {
       if (this.currentIndex < this.questions.length - 1) {
         this.currentIndex++;
         this.selectedOption = null;
+        const q = this.questions[this.currentIndex];
+        setClock(q.hour, q.minute);
       } else {
         this.$root.currentView = 'finish';
       }
@@ -83,7 +99,11 @@ export default {
     prevQuestion() {
       if (this.currentIndex > 0) {
         this.currentIndex--;
-        this.selectedOption = null;
+        const stored = this.answers.find(a => a.id === this.currentIndex);
+        this.selectedOption = stored ? stored.user : null;
+
+        const q = this.questions[this.currentIndex];
+        setClock(q.hour, q.minute);
       }
     }
   }
