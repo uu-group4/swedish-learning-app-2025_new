@@ -111,6 +111,108 @@ $root.currentView = 'viewName'
 * [ ] Configure build system
 * [ ] Implement proper state management
 
+## 🚨 Critical Information for Next Team
+
+### What You Should Be Aware Of
+
+**Vue.js Architecture:**
+
+* Uses Vue 3 with ES modules (no build system)
+* Component communication via props/emit pattern
+* Heavy reliance on `$root` for state management (anti-pattern)
+* External dependencies: `window.vocabulary` API and `window.save` localStorage wrapper
+
+**Data Flow:**
+
+```text
+startView → app.js → gameView → finishView
+    ↓         ↓         ↓         ↓
+Level    Current   Game     Results
+Select   State     Logic    Summary
+```
+
+**Game Mechanics:**
+
+* Fisher-Yates shuffling for questions/options
+* Statistics tracking (correct/incorrect/skipped)
+* Clock visualization with calculated hand positions
+* Progress bar showing completion status
+
+### Technical Debts & Unresolved Issues
+
+**🔴 Critical Issues:**
+
+* `startView.js` contains placeholder text ("xxxxxxxxx") in game instructions
+* `statistics.js` only shows static text, no actual statistics display
+* Navigation "Level select menu" button is non-functional
+* Inline styles in components should be moved to CSS files
+
+**🟡 Architectural Issues:**
+
+* No proper state management (uses `$root` access)
+* Missing error handling for API calls
+* No responsive design implementation
+* Unused jQuery demo code in `index.js`
+
+**🟠 Code Quality Issues:**
+
+* No TypeScript or linting configured
+* Missing unit tests
+* Inconsistent coding patterns
+* No build system for optimization
+
+### Essential Resources for Quick Start
+
+**Critical Dependencies:**
+
+```javascript
+// Vocabulary API - loads question data
+window.vocabulary.get_team_data(4)
+
+// Save API - localStorage wrapper  
+window.save.get/set("team04", data)
+
+// Question data structure
+{
+  hour: 14, minute: 30,
+  option1: "halv tre", option2: "kvart över två",
+  option3: "tjugo över två", option4: "halv fyra",
+  answer: "halv tre", explanation: "..."
+}
+```
+
+**Component Communication:**
+
+```javascript
+// Current pattern (needs improvement)
+this.$root.currentView = 'finish'
+
+// Recommended pattern
+this.$emit('navigate', 'finish')
+```
+
+### Advice for Week One
+
+#### Day 1-2: Fix Broken Features
+
+1. Replace placeholder text in `startView.js` with real game instructions
+2. Implement actual statistics display in `statistics.js`
+3. Connect navigation "Level select menu" functionality
+
+#### Day 3-4: Code Quality
+
+1. Move inline styles to proper CSS files
+2. Add error handling for vocabulary API calls
+3. Remove unused jQuery demo code
+
+#### Day 5-7: Architecture
+
+1. Implement proper state management (consider Vuex/Pinia)
+2. Add component testing framework
+3. Plan responsive design strategy
+
+**Critical Decision:** The app works but uses anti-patterns. Decide early whether to refactor existing code or build new features on current architecture.
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
